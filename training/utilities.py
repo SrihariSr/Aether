@@ -1,5 +1,6 @@
 import os
 import time
+from typing import Optional
 import torch
 from dataclasses import asdict
 
@@ -30,7 +31,7 @@ def save_checkpoint(
 def load_checkpoint(
     path: str,
     model: GPT,
-    optimizer: torch.optim.Optimizer | None = None,
+    optimizer: Optional[torch.optim.Optimizer] = None,
     device: str = "cpu",
 ) -> dict:
 

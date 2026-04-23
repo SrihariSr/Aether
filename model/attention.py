@@ -2,7 +2,7 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as f
-from config import GPTConfig
+from .config import GPTConfig
 
 class CausalSelfAttention(nn.Module):
     def __init__(self, config: GPTConfig):

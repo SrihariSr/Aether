@@ -3,9 +3,9 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as f
-from config import GPTConfig
-from attention import CausalSelfAttention
-from layers import LayerNorm, FeedForward, TokenPositionEmbedding
+from .config import GPTConfig
+from .attention import CausalSelfAttention
+from .layers import LayerNorm, FeedForward, TokenPositionEmbedding
 
 class TransformerBlock(nn.Module):
     def __init__(self, config: GPTConfig):
@@ -96,7 +96,7 @@ class GPT(nn.Module):
         return logits, loss
 
 if __name__ == "__main__":
-    from config import andromeda_small
+    from .config import andromeda_small
 
     config = andromeda_small()
     model = GPT(config)
