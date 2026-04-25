@@ -5,7 +5,7 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import torch
-from model.config import andromeda_small
+from model.config import andromeda_medium
 from model.transformer import GPT
 from data.dataloader import get_batch
 from training.optimizer import configure_optimizer, get_lr
@@ -15,19 +15,19 @@ from training.utilities import save_checkpoint, Timer
 
 MAX_LR       = 3e-4
 MIN_LR       = 3e-5
-WARMUP_STEPS = 100
-MAX_STEPS    = 5000
+WARMUP_STEPS = 600
+MAX_STEPS    = 30000
 WEIGHT_DECAY = 0.1
 GRAD_CLIP    = 1.0
 
 BATCH_SIZE   = 16       # sequences per step
-BLOCK_SIZE   = 256      # tokens per sequence
+BLOCK_SIZE   = 512      # tokens per sequence
 
-EVAL_INTERVAL = 250     # validation frequency
+EVAL_INTERVAL = 1000     # validation frequency
 EVAL_ITERS    = 50      # validation iterations
 LOG_INTERVAL  = 10      # logging frequency
 
-CKPT_DIR      = "checkpoints"
+CKPT_DIR      = "checkpoints/medium"
 
 # Device setup
 def get_device() -> str:
@@ -54,20 +54,20 @@ def estimate_val_loss(model, device: str, iters: int) -> float:
 # Main training loop
 def main():
     device = get_device()
-    print(f"Training Andromeda-Small on {device}")
+    print(f"Training Andromeda-Medium on {device}")
 
     torch.manual_seed(3407) # The 'all you need' seed
     if device == "cuda":
         torch.cuda.manual_seed(3407)
 
     # Build the model
-    config = andromeda_small()
+    config = andromeda_medium()
     assert config.block_size == BLOCK_SIZE, \
         "BLOCK_SIZE must match config.block_size"
 
     model = GPT(config).to(device)
     n_params = model.num_parameters()
-    print(f"Model: Andromeda-Small ({n_params/1e6:.2f}M non-embedding parameters)")
+    print(f"Model: Andromeda-Medium ({n_params/1e6:.2f}M non-embedding parameters)")
 
     # Build the optimiser
     optimizer = configure_optimizer(
