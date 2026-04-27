@@ -50,7 +50,7 @@ All outputs below are produced with `temperature=1.2, top_k=200, top_p=0.9, repe
 
 > **Prompt**: *"US senate vote"*
 >
-> **Output**: *"US senate vote on Tuesday to make that happen without a debate.
+> **Output**: "US senate vote on Tuesday to make that happen without a debate.
 
 Among these meetings is the House of Representatives’ majority leader, MOSA Director and Senate Majority Leader Mitch McConnell for president (Vt.) will run on special prosecutor general counsel Andrew Cuomo, before Republicans join in on December 1.
 
