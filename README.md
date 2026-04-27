@@ -162,8 +162,8 @@ python -m training.train
 # Generate
 python -m evaluate.generate \
     --ckpt checkpoints/medium/best.pt \
-    --prompt "The future of" \
+    --prompt "<prompt>" \
     --temperature 1.2 --top_k 200 --top_p 0.9 --repetition_penalty 1.3
 ```
 
-Built by [Srihari](https://github.com/SrihariSr), 2026.
+Built by [Srihari Srinivasan](https://github.com/SrihariSr), 2026.
