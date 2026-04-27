@@ -1,14 +1,14 @@
-# Andromeda
+# Aether
 
 A 63M parameter GPT-style language model, trained from scratch on a single laptop in 6.3 hours.
 
 ## What this is
 
-Andromeda is a decoder-only transformer language model, built and trained entirely from scratch. No fine-tuning, no pre-trained weights — the model started from random initialisation and learned English from 246M tokens of web text over 30,000 training steps.
+Aether is a decoder-only transformer language model, built and trained entirely from scratch. No fine-tuning, no pre-trained weights — the model started from random initialisation and learned English from 246M tokens of web text over 30,000 training steps.
 
 It's not a frontier model. It's deliberately small, trained on modest hardware, to demonstrate end-to-end competence across the full LLM pipeline: data ingestion, tokenisation, model architecture, training, inference, evaluation. Every component was written by hand in PyTorch.
 
-This project is the production-scale counterpart to [Forge](https://github.com/SrihariSr/Forge), a from-scratch ML library I built. Forge demonstrated understanding of ML concepts by reimplementing them; Andromeda demonstrates the ability to implement an LLM from scratch.
+This project is the production-scale counterpart to [Forge](https://github.com/SrihariSr/Forge), a from-scratch ML library I built. Forge demonstrated understanding of ML concepts by reimplementing them; Aether demonstrates the ability to implement an LLM from scratch.
 
 ## Technical highlights
 
@@ -36,7 +36,7 @@ This project is the production-scale counterpart to [Forge](https://github.com/S
 | 25,000 | 4.25     | 70         |
 | 30,000 | **4.21** | **67**     |
 
-For reference: a fully-trained GPT-2 Small (124M params, 40B tokens of training data) reaches perplexity ~17-24 on OpenWebText. Andromeda reaches a perplexity of 67 with half the parameters and ~1/160th of the training data.
+For reference: a fully-trained GPT-2 Small (124M params, 40B tokens of training data) reaches perplexity ~17-24 on OpenWebText. Aether reaches a perplexity of 67 with half the parameters and ~1/160th of the training data.
 
 ### Training throughput
 

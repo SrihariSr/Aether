@@ -1,5 +1,5 @@
 """
-Download and tokenize training data for Andromeda.
+Download and tokenize training data for Aether.
 Parallelised across CPU cores for fast processing of large datasets.
 """
 import os

@@ -89,7 +89,7 @@ ax_ppl.annotate(
 
 total_hours = elapsed[-1] / 60
 fig.suptitle(
-    f"Andromeda-Medium training run | 30K steps | {total_hours:.1f}h on Apple M4 Max",
+    f"Aether-Medium training run | 30K steps | {total_hours:.1f}h on Apple M4 Max",
     fontsize=13,
     fontweight="500",
     y=1.02,

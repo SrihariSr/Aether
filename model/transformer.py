@@ -22,7 +22,7 @@ class TransformerBlock(nn.Module):
 
 class GPT(nn.Module):
     """
-    The full Andromeda GPT language model.
+    The full Aether GPT language model.
     """
 
     def __init__(self, config: GPTConfig):

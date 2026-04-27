@@ -54,7 +54,7 @@ def estimate_val_loss(model, device: str, iters: int) -> float:
 # Main training loop
 def main():
     device = get_device()
-    print(f"Training Andromeda-Medium on {device}")
+    print(f"Training Aether-Medium on {device}")
 
     torch.manual_seed(3407) # The 'all you need' seed
     if device == "cuda":
@@ -67,7 +67,7 @@ def main():
 
     model = GPT(config).to(device)
     n_params = model.num_parameters()
-    print(f"Model: Andromeda-Medium ({n_params/1e6:.2f}M non-embedding parameters)")
+    print(f"Model: Aether-Medium ({n_params/1e6:.2f}M non-embedding parameters)")
 
     # Build the optimiser
     optimizer = configure_optimizer(
