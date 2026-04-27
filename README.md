@@ -56,11 +56,11 @@ All outputs below are produced with `temperature=1.2, top_k=200, top_p=0.9, repe
 >
 > **Output**: "US senate vote on Tuesday to make that happen without a debate.
 
-Among these meetings is the House of Representatives’ majority leader, MOSA Director and Senate Majority Leader Mitch McConnell for president (Vt.) will run on special prosecutor general counsel Andrew Cuomo, before Republicans join in on December 1.
+> Among these meetings is the House of Representatives’ majority leader, MOSA Director and Senate Majority Leader Mitch McConnell for president (Vt.) will run on special prosecutor general counsel Andrew Cuomo, before Republicans join in on December 1.
 
-It's clear in the fact that they're going to face a series of challenges and ask what happens under oath or their decision-making? The first major problem is whether, during a debate last year, we saw what happened again that Democrats had set up an anti-imbridge bill, known as Raunteo, introduced to protect civil liberties protections of the city's African Americans while having direct control over white privilege in office and allowed him to challenge the matter.
+> It's clear in the fact that they're going to face a series of challenges and ask what happens under oath or their decision-making? The first major problem is whether, during a debate last year, we saw what happened again that Democrats had set up an anti-imbridge bill, known as Raunteo, introduced to protect civil liberties protections of the city's African Americans while having direct control over white privilege in office and allowed him to challenge the matter.
 
-The issues raised by many senators, especially congressional leaders, seem very likely and significantly below how the Senate goes about it (although some Democrats) that would oppose the GOP’s right to decide for President Barack Obama
+> The issues raised by many senators, especially congressional leaders, seem very likely and significantly below how the Senate goes about it (although some Democrats) that would oppose the GOP’s right to decide for President Barack Obama
 "*
 
 ### Corporate PR prompt
@@ -69,11 +69,11 @@ The issues raised by many senators, especially congressional leaders, seem very 
 >
 > **Output**: "A spokesperson for the company said on Tuesday that three schools have "a clear concerns about a candidate coming through this matter."
 
-“We take any available information as such and we hope to complete it for publication. This change will ensure all students can provide a benefit while continuing with our school year-end experience to evaluate that decision,” Yutay says. The department doesn't want anyone to attend and ask anything because they aren’t ready to begin the first major program at M.A.N., or he plans to leave his office on March 1 after the election.
+> “We take any available information as such and we hope to complete it for publication. This change will ensure all students can provide a benefit while continuing with our school year-end experience to evaluate that decision,” Yutay says. The department doesn't want anyone to attend and ask anything because they aren’t ready to begin the first major program at M.A.N., or he plans to leave his office on March 1 after the election.
 
-His calls for his wife to submit a series of meetings to all school officials, including Kaley Sisler & Sam Smith in both India and England; said she will provide "a unique message". Mr Smith said the four schools have been receiving good interest, when school authorities cannot move ahead with student support.
+> His calls for his wife to submit a series of meetings to all school officials, including Kaley Sisler & Sam Smith in both India and England; said she will provide "a unique message". Mr Smith said the four schools have been receiving good interest, when school authorities cannot move ahead with student support.
 
-Kaley Sisler has come up in 2013 and recently invited members for a major committee"*
+> Kaley Sisler has come up in 2013 and recently invited members for a major committee
 
 ### Narrative prompt
 
@@ -88,16 +88,16 @@ First-person narrative with spatial reasoning (cardinal directions, distance mea
 Being honest about where the model fails is as important as showing where it succeeds.
 
 ### Semantic inconsistency
-The model produces grammatical sentences with contradictory or nonsensical content. *"The capital of France is a small, huge, massive-scale and complex city"* — every word is a plausible English word, every pair flows grammatically, but the sentence is meaningless. This is the expected failure mode of an undertrained language model that has learned phrase shapes without learning what they refer to.
+The model produces grammatically correct sentences but with contradictory or nonsensical content. This is the expected failure mode of an undertrained language model that has learned patterns and structures without learning what they refer to.
 
 ### Topic drift over long generations
-Samples that start on one topic often migrate to another after 50-100 tokens. This reflects the 512-token context window and limited training data — the model has learned what different genres look like locally but hasn't seen enough text to learn *when* to switch.
+Samples that start on one topic often migrate to another after 50-100 tokens. This reflects the 512-token context window and limited training data; the model has learned what different genres look like locally but hasn't seen enough text to learn *when* to switch.
 
 ### Fragile factual retrieval
 Simple factual questions fail unpredictably. Prompted with "The capital of France is", the model produces generic news-about-France output without ever confidently emitting "Paris". World knowledge requires orders of magnitude more training data than this model received.
 
 ### Repetition without safeguards
-Without the repetition penalty, low-temperature generation collapses into loops (e.g. "the crisis has been a major problem ..." × 20). The repetition penalty applied to the last 64 tokens eliminates this almost entirely. This is a known failure mode of small LMs and a well-understood problem with a standard solution.
+Without the repetition penalty, low-temperature generation collapses into loops (e.g. "the crisis has been a major problem ..." × 20). The repetition penalty applied to the last 64 tokens eliminates this almost entirely.
 
 ## Architecture
 
@@ -148,7 +148,6 @@ Logits (B, T, 50,257)
 | Total tokens seen      | 245,760,000       |
 
 Validation loss evaluated every 1,000 steps on 50 randomly-sampled batches from a held-out split.
-
 
 ## How to run
 
