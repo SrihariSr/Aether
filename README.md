@@ -2,6 +2,10 @@
 
 A 63M parameter GPT-style language model, trained from scratch on a single laptop in 6.3 hours.
 
+*In Greek mythology, Aether is the primordial god of the bright, upper sky, light, and atmosphere, the pure essence breathed by the gods.*
+
+*This model breathes in tokens and breathes out prose.*
+
 ## What this is
 
 Aether is a decoder-only transformer language model, built and trained entirely from scratch. No fine-tuning, no pre-trained weights — the model started from random initialisation and learned English from 246M tokens of web text over 30,000 training steps.
@@ -165,5 +169,8 @@ python -m evaluate.generate \
     --prompt "<prompt>" \
     --temperature 1.2 --top_k 40 --top_p 0.9 --repetition_penalty 1.3
 ```
+
+*Out of noise, a voice.*
+*Out of weight, a wind.*
 
 Built by [Srihari Srinivasan](https://github.com/SrihariSr), 2026.
