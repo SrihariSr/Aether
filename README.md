@@ -63,7 +63,7 @@ The issues raised by many senators, especially congressional leaders, seem very 
 
 > **Prompt**: *"A spokesperson for the company said"*
 >
-> **Output**: *"A spokesperson for the company said on Tuesday that three schools have "a clear concerns about a candidate coming through this matter."
+> **Output**: "A spokesperson for the company said on Tuesday that three schools have "a clear concerns about a candidate coming through this matter."
 
 “We take any available information as such and we hope to complete it for publication. This change will ensure all students can provide a benefit while continuing with our school year-end experience to evaluate that decision,” Yutay says. The department doesn't want anyone to attend and ask anything because they aren’t ready to begin the first major program at M.A.N., or he plans to leave his office on March 1 after the election.
 
