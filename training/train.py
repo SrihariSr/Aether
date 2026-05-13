@@ -5,7 +5,7 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import torch
-from model.config import andromeda_medium
+from model.config import aether_medium
 from model.transformer import GPT
 from data.dataloader import get_batch
 from training.optimizer import configure_optimizer, get_lr
@@ -16,7 +16,7 @@ from training.utilities import save_checkpoint, Timer
 MAX_LR       = 3e-4
 MIN_LR       = 3e-5
 WARMUP_STEPS = 600
-MAX_STEPS    = 30000
+MAX_STEPS    = 40000
 WEIGHT_DECAY = 0.1
 GRAD_CLIP    = 1.0
 
@@ -61,7 +61,7 @@ def main():
         torch.cuda.manual_seed(3407)
 
     # Build the model
-    config = andromeda_medium()
+    config = aether_medium()
     assert config.block_size == BLOCK_SIZE, \
         "BLOCK_SIZE must match config.block_size"
 
@@ -76,15 +76,32 @@ def main():
         weight_decay=WEIGHT_DECAY,
     )
 
-    # Track the best model for checkpoint selection
+    # Resume from checkpoint if available
+    resume_path = os.path.join(CKPT_DIR, "best.pt")
+    start_step = 0
     best_val_loss = float("inf")
+
+    if os.path.exists(resume_path):
+        print(f"Resuming from {resume_path}...")
+        ckpt = torch.load(resume_path, map_location=device, weights_only=False)
+        model.load_state_dict(ckpt["model"])
+        optimizer.load_state_dict(ckpt["optimizer"])
+        start_step = ckpt["step"] + 1
+        best_val_loss = ckpt["val_loss"]
+        print(f"Resumed at step {start_step}, val_loss {best_val_loss:.4f}")
+    else:
+        print("No checkpoint found, starting from scratch")
 
     model.train()
     t_start = time.time()
 
-    for step in range(MAX_STEPS + 1):
+    for step in range(start_step, MAX_STEPS + 1):
         # Update learning rate for this step
-        lr = get_lr(step, WARMUP_STEPS, MAX_STEPS, MAX_LR, MIN_LR)
+        if step <= 30000:
+            lr = get_lr(step, WARMUP_STEPS, 30000, MAX_LR, MIN_LR)
+        else:
+            # Fresh cosine decay from 5e-5 down to 1e-5 over the extension steps
+            lr = get_lr(step - 30000, 50, 10000, 5e-5, 1e-5)
         for pg in optimizer.param_groups:
             pg["lr"] = lr
 

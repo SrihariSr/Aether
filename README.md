@@ -28,7 +28,7 @@ This project is the production-scale counterpart to [Forge](https://github.com/S
 
 ![Validation loss and perplexity over training](loss_curve.png)
 
-**Final validation loss: 4.21** (perplexity 67) after 6 hours 21 minutes of training.
+**Final validation loss: 4.14** (perplexity 63) after 8 hours 30 minutes of training.
 
 | Step   | Val loss | Perplexity |
 |--------|----------|------------|
@@ -38,66 +38,62 @@ This project is the production-scale counterpart to [Forge](https://github.com/S
 | 15,000 | 4.49     | 89         |
 | 20,000 | 4.34     | 77         |
 | 25,000 | 4.25     | 70         |
-| 30,000 | **4.21** | **67**     |
+| 30,000 | 4.21     | 67         |
+| 40,000 | **4.14** | **63**     |
 
-For reference: a fully-trained GPT-2 Small (124M params, 40B tokens of training data) reaches perplexity ~17-24 on OpenWebText. Aether reaches a perplexity of 67 with half the parameters and ~1/160th of the training data.
+For reference: a fully-trained GPT-2 Small (124M params, 40B tokens of training data) reaches perplexity ~17-24 on OpenWebText. Aether reaches a perplexity of 63 with half the parameters and ~1/160th of the training data.
 
 ### Training throughput
 
-Sustained ~11,150 tokens/sec on an M4 Max throughout the 6-hour run. No divergence, no crashes, no thermal emergencies.
+Sustained ~11,150 tokens/sec on an M4 Max throughout the 8.5 hour run. No divergence, no crashes, no thermal emergencies.
 
 ## Sample outputs
 
-All outputs below are produced with `temperature=1.2, top_k=200, top_p=0.9, repetition_penalty=1.3`, unedited.
+All outputs below are produced with `temperature=1.0, top_k=40, top_p=0.9, repetition_penalty=1.3`, unedited.
 
 ### News prompt
 
 > **Prompt**: *"US senate vote"*
 >
-> **Output**: "US senate vote on Tuesday to make that happen without a debate.
+> **Output**: US senate vote on Sunday.
 
-> Among these meetings is the House of Representatives’ majority leader, MOSA Director and Senate Majority Leader Mitch McConnell for president (Vt.) will run on special prosecutor general counsel Andrew Cuomo, before Republicans join in on December 1.
+>"We must work to make sure we don't support the House of Representatives and the Senate Foreign Relations Committee,” he said. “It is essential that we get people interested in protecting us from such a massive issue."
 
-> It's clear in the fact that they're going to face a series of challenges and ask what happens under oath or their decision-making? The first major problem is whether, during a debate last year, we saw what happened again that Democrats had set up an anti-imbridge bill, known as Raunteo, introduced to protect civil liberties protections of the city's African Americans while having direct control over white privilege in office and allowed him to challenge the matter.
+>The Washington Post reported on Monday that Trump, under pressure from Congress, and the U.S. Senate, have been able to pass on his own rules of government. The New York Times cited Trump as saying the executive branch has no jurisdiction over whether or not Congress can act or enforce its constitution, including federal immigration law and laws in place for immigrants who are illegally living in countries with more than 10 million foreign nationals.
 
-> The issues raised by many senators, especially congressional leaders, seem very likely and significantly below how the Senate goes about it (although some Democrats) that would oppose the GOP’s right to decide for President Barack Obama
-"*
+>The Trump administration has repeatedly denied any wrongdoing in the campaign of President Obama’s government — arguing that it is "not a criminal activity" by a country whose political or business interests have been "in the hands of the people," according to an e-mail from The Times, which was sent back*
 
 ### Corporate PR prompt
 
 > **Prompt**: *"A spokesperson for the company said"*
 >
-> **Output**: "A spokesperson for the company said on Tuesday that three schools have "a clear concerns about a candidate coming through this matter."
+> **Output**: A spokesperson for the company said on Sunday that it was not investigating a report by The Associated Press.
 
-> “We take any available information as such and we hope to complete it for publication. This change will ensure all students can provide a benefit while continuing with our school year-end experience to evaluate that decision,” Yutay says. The department doesn't want anyone to attend and ask anything because they aren’t ready to begin the first major program at M.A.N., or he plans to leave his office on March 1 after the election.
+>It said an inquiry had been made into possible criminal activity in Russia and said there was no evidence to support such a case.
 
-> His calls for his wife to submit a series of meetings to all school officials, including Kaley Sisler & Sam Smith in both India and England; said she will provide "a unique message". Mr Smith said the four schools have been receiving good interest, when school authorities cannot move ahead with student support.
+>Koschov, who is currently at the firm’s business partner, did not respond to an email seeking comment on his claims or any other details of the matter. He also declined to return calls from the authorities and told The Associated Press that there were no known reports about Russia involvement in this matter, however.
 
-> Kaley Sisler has come up in 2013 and recently invited members for a major committee
+>A spokesman for the Russian state-owned company said it had been working with a group of law enforcement officers.
+
+>Russian President Vladimir Putin called the investigation “not going as far back”, saying the agency has “dressed some of that and will continue to review” its reports and is investigating any criminal activity in Russia.
+
+Koschov’s company said it would “underground all our investigations
+
 
 ### Narrative prompt
 
 > **Prompt**: *"Once upon a time"*
 >
-> **Output**: *"I could easily see how the weather was going on in New York. The rain, too, had been about two-and-a-half miles south of New York City. That meant that people would be walking out to the mountains to get a place off the ground and all that was there were huge roads."*
+> **Output**: *Once upon a time, I could easily go back to a game where the only way you can do it is find a single level match and I had to try it.
+
+>So what are your main goal of the match?
+
+>I really love that game. It will be fun if I’m playing around, just like they did on some kind of deck where they were both good at that point. In fact, it is a lot more than a win or two because there is an absolute risk of it being a one-off match. If you think the whole set would come down to a game or not, then you can just go up and do something about it and not win the game.
+
+>If I go back to a game where I will always start with that tournament, I want to be able to play at a tournament level but if you do it well, you’ll only get one more shot when you don’t see them in the opening seconds, so be
+*
 
 First-person narrative with spatial reasoning (cardinal directions, distance measurements). OpenWebText has relatively little fairy-tale content, so the model defaulted to the most common first-person genre in its training data.
-
-## Failure modes
-
-Being honest about where the model fails is as important as showing where it succeeds.
-
-### Semantic inconsistency
-The model produces grammatically correct sentences but with contradictory or nonsensical content. This is the expected failure mode of an undertrained language model that has learned patterns and structures without learning what they refer to.
-
-### Topic drift over long generations
-Samples that start on one topic often migrate to another after 50-100 tokens. This reflects the 512-token context window and limited training data; the model has learned what different genres look like locally but hasn't seen enough text to learn *when* to switch.
-
-### Fragile factual retrieval
-Simple factual questions fail unpredictably. Prompted with "The capital of France is", the model produces generic news-about-France output without ever confidently emitting "Paris". World knowledge requires orders of magnitude more training data than this model received.
-
-### Repetition without safeguards
-Without the repetition penalty, low-temperature generation collapses into loops (e.g. "the crisis has been a major problem ..." × 20). The repetition penalty applied to the last 64 tokens eliminates this almost entirely.
 
 ## Architecture
 
@@ -139,7 +135,7 @@ Logits (B, T, 50,257)
 | Peak learning rate     | 3e-4              |
 | Min learning rate      | 3e-5              |
 | Warmup steps           | 600               |
-| Total steps            | 30,000            |
+| Total steps            | 40,000            |
 | LR schedule            | Linear warmup + cosine decay |
 | Gradient clipping      | 1.0 (L2 norm)     |
 | Batch size             | 16 sequences      |

@@ -18,7 +18,7 @@ class GPTConfig:
     def head_dim(self) -> int:
         return self.n_embd // self.n_head # Dimension of each attention head
   
-def andromeda_small() -> GPTConfig:
+def aether_small() -> GPTConfig:
     # Around 15M parameters
     return GPTConfig(
         block_size=256,
@@ -27,7 +27,7 @@ def andromeda_small() -> GPTConfig:
         n_embd=384,
         dropout=0.1,
     )
-def andromeda_medium() -> GPTConfig:
+def aether_medium() -> GPTConfig:
     # Around 50M parameters
     return GPTConfig(
         block_size=512,
