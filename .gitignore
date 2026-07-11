@@ -6,3 +6,4 @@ data/prepared
 logs/
 .DS_Store
 .antigravity/
+scripts/_baseline.json
