@@ -96,9 +96,9 @@ class GPT(nn.Module):
         return logits, loss
 
 if __name__ == "__main__":
-    from .config import andromeda_small
+    from .config import aether_small
 
-    config = andromeda_small()
+    config = aether_small()
     model = GPT(config)
 
     print(f"Total parameters:         {sum(p.numel() for p in model.parameters()):,}")
