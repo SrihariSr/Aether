@@ -45,35 +45,52 @@ def main():
     # Extract texts as a list so we can pool.imap them
     texts = (dataset[i]["text"] for i in range(num_documents))
 
-    # Parallel tokenisation
-    all_tokens: list[int] = []
+    # Parallel tokenisation, streamed to disk.
+    # The old version held every token as a Python int in one list (~36 bytes each,
+    # ~9 GB at 246M tokens). We buffer a few million at a time, convert to uint16,
+    # and append to a flat file. Peak RAM stays around 20 MB.
+    all_path = os.path.join(data_dir, "all.bin")
+    total_tokens = 0
+    buf: list[int] = []
+    FLUSH_EVERY = 10_000_000   # ~20 MB per flush
 
-    with Pool(num_workers, initializer=init_worker) as pool:
-        for tokens in tqdm(
-            pool.imap(tokenize_document, texts, chunksize=64),
-            total=num_documents,
-        ):
-            all_tokens.extend(tokens)
+    with open(all_path, "wb") as fout:
+        with Pool(num_workers, initializer=init_worker) as pool:
+            for tokens in tqdm(
+                pool.imap(tokenize_document, texts, chunksize=64),
+                total=num_documents,
+            ):
+                buf.extend(tokens)
+                if len(buf) >= FLUSH_EVERY:
+                    np.array(buf, dtype=np.uint16).tofile(fout)
+                    total_tokens += len(buf)
+                    buf.clear()
+        if buf:
+            np.array(buf, dtype=np.uint16).tofile(fout)
+            total_tokens += len(buf)
+            buf.clear()
 
-    total_tokens = len(all_tokens)
     print(f"\nTotal tokens: {total_tokens:,}")
 
-    # Convert to numpy array
-    all_tokens_np = np.array(all_tokens, dtype=np.uint16)
+    # Split 90/10 by memory-mapping the flat file, so it is never fully loaded.
+    data = np.memmap(all_path, dtype=np.uint16, mode="r")
+    assert len(data) == total_tokens, f"file has {len(data):,}, counted {total_tokens:,}"
+    split_point = int(len(data) * 0.9)
 
-    # Split into train and val
-    split_point = int(len(all_tokens_np) * 0.9)
-    train_tokens = all_tokens_np[:split_point]
-    val_tokens = all_tokens_np[split_point:]
-
-    print(f"Train tokens: {len(train_tokens):,}")
-    print(f"Val tokens:   {len(val_tokens):,}")
-
-    # Save to disk
     train_path = os.path.join(data_dir, "train.bin")
     val_path = os.path.join(data_dir, "val.bin")
-    train_tokens.tofile(train_path)
-    val_tokens.tofile(val_path)
+
+    CHUNK = 50_000_000
+    for path, lo, hi in [(train_path, 0, split_point), (val_path, split_point, len(data))]:
+        with open(path, "wb") as fout:
+            for start in range(lo, hi, CHUNK):
+                np.asarray(data[start:min(start + CHUNK, hi)]).tofile(fout)
+
+    print(f"Train tokens: {split_point:,}")
+    print(f"Val tokens:   {len(data) - split_point:,}")
+
+    del data
+    os.remove(all_path)
 
     print(f"\nSaved:")
     print(f"{train_path} ({os.path.getsize(train_path) / 1e6:.1f} MB)")
