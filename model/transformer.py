@@ -50,9 +50,15 @@ class GPT(nn.Module):
         self.apply(self._init_weights)
 
         # Scale init of residual projections by 1/sqrt(2 * n_layer)
-        # GPT-2 trick: keeps variance stable through deep networks
+        # GPT-2 trick: keeps variance stable through deep networks.
+        # Only the two projections that WRITE INTO the residual stream get scaled:
+        #     blocks.N.attn.out_proj.weight
+        #     blocks.N.ffn.proj.weight
+        # qkv_proj.weight also ends in "proj.weight" but it READS FROM the stream,
+        # so the suffix has to be specific enough to exclude it.
+        RESIDUAL_PROJECTIONS = ("attn.out_proj.weight", "ffn.proj.weight")
         for pn, p in self.named_parameters():
-            if pn.endswith("out_proj.weight") or pn.endswith("proj.weight"):
+            if pn.endswith(RESIDUAL_PROJECTIONS):
                 nn.init.normal_(p, mean=0.0, std=0.02 / math.sqrt(2 * config.n_layer))
 
     def _init_weights(self, module: nn.Module) -> None:
