@@ -21,6 +21,8 @@ def configure_optimizer(
 
     n_decay = sum(p.numel() for p in decay_params)
     n_no_decay = sum(p.numel() for p in no_decay_params)
+    print(f"Optimiser: {len(decay_params)} decayed tensors ({n_decay:,} params), "
+          f"{len(no_decay_params)} undecayed tensors ({n_no_decay:,} params)")
 
     return optimizer
 

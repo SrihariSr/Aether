@@ -4,6 +4,7 @@ import time
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import numpy as np
 import torch
 from model.config import aether_medium
 from model.transformer import GPT
@@ -56,9 +57,11 @@ def main():
     device = get_device()
     print(f"Training Aether-Medium on {device}")
 
-    torch.manual_seed(3407) # The 'all you need' seed
+    SEED = 3407  # The 'all you need' seed
+    torch.manual_seed(SEED)
+    np.random.seed(SEED)  # get_batch() draws its window offsets from np.random
     if device == "cuda":
-        torch.cuda.manual_seed(3407)
+        torch.cuda.manual_seed(SEED)
 
     # Build the model
     config = aether_medium()
