@@ -22,6 +22,9 @@ def generate(
     top_p: float | None = None,
     repetition_penalty: float = 1.0,
 ) -> torch.Tensor:
+    if temperature <= 0.0:
+        raise ValueError(f"temperature must be > 0 (got {temperature})")
+
     for _ in range(max_new_tokens):
         # Crop context to block_size most recent tokens
         idx_cond = idx if idx.size(1) <= model.config.block_size else idx[:, -model.config.block_size:]
@@ -44,8 +47,18 @@ def generate(
             logits.scatter_(1, sorted_indices, sorted_logits)
 
         if repetition_penalty > 1.0:
-            for token_id in set(idx[0].tolist()[-64:]):    # last 64 tokens
-                logits[:, token_id] /= repetition_penalty
+            # CTRL-style penalty (Keskar et al., 2019).
+            # Dividing a NEGATIVE logit makes it LARGER, which rewards the token
+            # instead of penalising it. So: positive scores are divided, negative
+            # scores are multiplied. Both moves push the score down.
+            # Indexed per batch row so row b is penalised by row b's own history.
+            for b in range(idx.size(0)):
+                for token_id in set(idx[b, -64:].tolist()):   # last 64 tokens
+                    score = logits[b, token_id]
+                    if score > 0:
+                        logits[b, token_id] = score / repetition_penalty
+                    else:
+                        logits[b, token_id] = score * repetition_penalty
 
         # Softmax to probabilities, then sample
         probs = f.softmax(logits, dim=-1)
@@ -74,7 +87,7 @@ def load_model(ckpt_path: str, device: str) -> GPT:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ckpt",        default="checkpoints/best.pt")
+    parser.add_argument("--ckpt",        default="checkpoints/medium/best.pt")
     parser.add_argument("--prompt",      default="Once upon a time")
     parser.add_argument("--max_tokens",  type=int, default=200)
     parser.add_argument("--temperature", type=float, default=0.8)
