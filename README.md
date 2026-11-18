@@ -8,11 +8,11 @@ A 63.76M-parameter GPT-style language model, trained from scratch on a single la
 
 ## What this is
 
-Aether is a decoder-only transformer language model, built and trained entirely from scratch. No fine-tuning, no pre-trained weights — the model started from random initialisation and was trained on web text for 40,000 steps: 30,000 steps followed by a 10,000-step extension. Over the full run it saw about 327.7M tokens, sampled at random from a training split of 509.25M tokens (the equivalent of about 0.64 passes over the split).
+Aether is a decoder-only transformer language model, built and trained entirely from scratch. No fine-tuning and no pre-trained weights: the model started from random initialisation and was trained on web text for 40,000 steps: 30,000 steps followed by a 10,000-step extension. Over the full run it saw about 327.7M tokens, sampled at random from a training split of 509.25M tokens (the equivalent of about 0.64 passes over the split).
 
-It's not a frontier model. It's deliberately small, trained on modest hardware, to demonstrate end-to-end competence across the full LLM pipeline: data ingestion, tokenisation, model architecture, training, inference, evaluation. The model, training loop, data pipeline and sampler were written by hand in PyTorch. The tokeniser is tiktoken's GPT-2 BPE, and the dataset is loaded through Hugging Face `datasets`.
+It is deliberately small and was trained on a single laptop, as an end-to-end exercise covering the LLM pipeline: data ingestion, tokenisation, model architecture, training, inference and evaluation. The model, training loop, data pipeline and sampler were written by hand in PyTorch. The tokeniser is tiktoken's GPT-2 BPE, and the dataset is loaded through Hugging Face `datasets`.
 
-This project is the production-scale counterpart to [Forge](https://github.com/SrihariSr/Forge), a from-scratch ML library I built. Forge demonstrated understanding of ML concepts by reimplementing them; Aether demonstrates the ability to implement an LLM from scratch.
+This project follows [Forge](https://github.com/SrihariSr/Forge), a from-scratch ML library I built. Forge reimplements ML concepts, while Aether implements and trains a language model.
 
 ## Technical highlights
 
@@ -59,42 +59,41 @@ All outputs below are produced with `temperature=1.0, top_k=40, top_p=0.9, repet
 > **Prompt**: *"US senate vote"*
 >
 > **Output**: US senate vote on Sunday.
-
->"We must work to make sure we don't support the House of Representatives and the Senate Foreign Relations Committee,” he said. “It is essential that we get people interested in protecting us from such a massive issue."
-
->The Washington Post reported on Monday that Trump, under pressure from Congress, and the U.S. Senate, have been able to pass on his own rules of government. The New York Times cited Trump as saying the executive branch has no jurisdiction over whether or not Congress can act or enforce its constitution, including federal immigration law and laws in place for immigrants who are illegally living in countries with more than 10 million foreign nationals.
-
->The Trump administration has repeatedly denied any wrongdoing in the campaign of President Obama’s government — arguing that it is "not a criminal activity" by a country whose political or business interests have been "in the hands of the people," according to an e-mail from The Times, which was sent back*
+>
+> "We must work to make sure we don't support the House of Representatives and the Senate Foreign Relations Committee,” he said. “It is essential that we get people interested in protecting us from such a massive issue."
+>
+> The Washington Post reported on Monday that Trump, under pressure from Congress, and the U.S. Senate, have been able to pass on his own rules of government. The New York Times cited Trump as saying the executive branch has no jurisdiction over whether or not Congress can act or enforce its constitution, including federal immigration law and laws in place for immigrants who are illegally living in countries with more than 10 million foreign nationals.
+>
+> The Trump administration has repeatedly denied any wrongdoing in the campaign of President Obama’s government — arguing that it is "not a criminal activity" by a country whose political or business interests have been "in the hands of the people," according to an e-mail from The Times, which was sent back
 
 ### Corporate PR prompt
 
 > **Prompt**: *"A spokesperson for the company said"*
 >
 > **Output**: A spokesperson for the company said on Sunday that it was not investigating a report by The Associated Press.
-
->It said an inquiry had been made into possible criminal activity in Russia and said there was no evidence to support such a case.
-
->Koschov, who is currently at the firm’s business partner, did not respond to an email seeking comment on his claims or any other details of the matter. He also declined to return calls from the authorities and told The Associated Press that there were no known reports about Russia involvement in this matter, however.
-
->A spokesman for the Russian state-owned company said it had been working with a group of law enforcement officers.
-
->Russian President Vladimir Putin called the investigation “not going as far back”, saying the agency has “dressed some of that and will continue to review” its reports and is investigating any criminal activity in Russia.
-
-Koschov’s company said it would “underground all our investigations
+>
+> It said an inquiry had been made into possible criminal activity in Russia and said there was no evidence to support such a case.
+>
+> Koschov, who is currently at the firm’s business partner, did not respond to an email seeking comment on his claims or any other details of the matter. He also declined to return calls from the authorities and told The Associated Press that there were no known reports about Russia involvement in this matter, however.
+>
+> A spokesman for the Russian state-owned company said it had been working with a group of law enforcement officers.
+>
+> Russian President Vladimir Putin called the investigation “not going as far back”, saying the agency has “dressed some of that and will continue to review” its reports and is investigating any criminal activity in Russia.
+>
+> Koschov’s company said it would “underground all our investigations
 
 
 ### Narrative prompt
 
 > **Prompt**: *"Once upon a time"*
 >
-> **Output**: *Once upon a time, I could easily go back to a game where the only way you can do it is find a single level match and I had to try it.
-
->So what are your main goal of the match?
-
->I really love that game. It will be fun if I’m playing around, just like they did on some kind of deck where they were both good at that point. In fact, it is a lot more than a win or two because there is an absolute risk of it being a one-off match. If you think the whole set would come down to a game or not, then you can just go up and do something about it and not win the game.
-
->If I go back to a game where I will always start with that tournament, I want to be able to play at a tournament level but if you do it well, you’ll only get one more shot when you don’t see them in the opening seconds, so be
-*
+> **Output**: Once upon a time, I could easily go back to a game where the only way you can do it is find a single level match and I had to try it.
+>
+> So what are your main goal of the match?
+>
+> I really love that game. It will be fun if I’m playing around, just like they did on some kind of deck where they were both good at that point. In fact, it is a lot more than a win or two because there is an absolute risk of it being a one-off match. If you think the whole set would come down to a game or not, then you can just go up and do something about it and not win the game.
+>
+> If I go back to a game where I will always start with that tournament, I want to be able to play at a tournament level but if you do it well, you’ll only get one more shot when you don’t see them in the opening seconds, so be
 
 The model continues the prompt as a first-person discussion of games and tournaments rather than as a fairy tale. OpenWebText has relatively little fairy-tale content, so the model defaulted to the most common first-person genre in its training data.
 
