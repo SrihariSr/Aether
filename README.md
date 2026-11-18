@@ -20,7 +20,7 @@ This project follows [Forge](https://github.com/SrihariSr/Forge), a from-scratch
 - **Training**: 40,000 steps of AdamW (30,000 steps followed by a 10,000-step extension), with warmup + cosine LR decay in each phase, gradient clipping, per-parameter-group weight decay
 - **Architecture choices**: weight-tied embeddings, pre-norm residual blocks, GELU feed-forward, no biases in Linear/LayerNorm (LLaMA convention)
 - **Data pipeline**: OpenWebText tokenised with GPT-2 BPE (tiktoken), parallelised across 12 CPU cores, memory-mapped binary files for batch sampling
-- **Training stability**: GPT-2-style scaled initialisation: every weight whose name ends in `proj.weight` starts with std 0.02/√(2 x n_layer). This covers the residual projections (`attn.out_proj`, `ffn.proj`) and also the attention `qkv_proj`, which is not a residual projection
+- **Training stability**: GPT-2-style scaled initialisation: every weight whose name ends in `proj.weight` starts with std 0.02/√(2 x n_layer). This covers the residual projections (`attn.out_proj`, `ffn.proj`) and also the attention `qkv_proj`, which is not a residual projection (see Known issues)
 - **Inference**: top-k + top-p sampling with repetition penalty over a rolling 64 token window
 - **Hardware**: Apple M4 Max with 14-core CPU, 32-core GPU, 36GB unified memory, MPS backend using PyTorch
 
@@ -172,6 +172,19 @@ python -m evaluate.generate \
     --prompt "<prompt>" \
     --temperature 1.0 --top_k 40 --top_p 0.9 --repetition_penalty 1.3
 ```
+
+## Known issues
+
+These are kept as they are so that v1's results stay reproducible from this code, within the limits described in items 5 and 6.
+
+1. **Initialisation**: the residual scaling also applies to `qkv_proj`, so Q, K and V start at std 0.02/√24 ≈ 0.0041 rather than 0.02.
+2. **Sampler**: `generate()` crops the context to `block_size` (512) and recomputes the full sequence for every token, because there is no KV cache.
+3. **Repetition penalty**: it divides every penalised logit, which makes negative logits larger rather than smaller.
+4. **Data**: `data/download.py` concatenates documents without an end-of-text token between them.
+5. **Batch sampling seed**: `training/train.py` seeds PyTorch but not NumPy, and `get_batch()` draws its offsets from NumPy. A rerun therefore samples different batches and will not match v1's losses exactly.
+6. **Extension boundary**: v1 resumed at step 30,001, so it made 39,999 updates. A fresh run of this code also trains step 30,000, which makes 40,000 updates.
+7. **Default checkpoint**: `evaluate/generate.py` defaults to `checkpoints/best.pt` rather than `checkpoints/medium/best.pt`, so pass `--ckpt` as shown in "How to run".
+8. **Penalty order**: the repetition penalty is applied after top-k and top-p filtering, and it uses the first batch row's history for every row in a batch.
 
 *Out of noise, a voice.*
 *Out of weight, a wind.*
