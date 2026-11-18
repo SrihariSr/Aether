@@ -8,7 +8,7 @@ A 63.76M-parameter GPT-style language model, trained from scratch on a single la
 
 ## What this is
 
-Aether is a decoder-only transformer language model, built and trained entirely from scratch. No fine-tuning and no pre-trained weights: the model started from random initialisation and was trained on web text for 40,000 steps: 30,000 steps followed by a 10,000-step extension. Over the full run it saw about 327.7M tokens, sampled at random from a training split of 509.25M tokens (the equivalent of about 0.64 passes over the split).
+Aether is a decoder-only transformer language model, built and trained entirely from scratch. No fine-tuning and no pre-trained weights: the model started from random initialisation and was trained on web text for 40,000 steps (30,000 steps followed by a 10,000-step extension). Over the full run it saw about 327.7M tokens, sampled at random from a training split of 509.25M tokens (the equivalent of about 0.64 passes over the split).
 
 It is deliberately small and was trained on a single laptop, as an end-to-end exercise covering the LLM pipeline: data ingestion, tokenisation, model architecture, training, inference and evaluation. The model, training loop, data pipeline and sampler were written by hand in PyTorch. The tokeniser is tiktoken's GPT-2 BPE, and the dataset is loaded through Hugging Face `datasets`.
 
@@ -44,11 +44,9 @@ Training took 513.5 minutes (about 8 hours 34 minutes): 381.1 minutes for the fi
 | 39,000 | **4.14** | **63**     |
 | 40,000 | 4.19     | 66         |
 
-For scale, the smallest model in the [GPT-2 paper](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) has 117M parameters, and the WebText dataset used in that paper contains slightly over 8 million documents (40 GB of text). The paper reports no results on OpenWebText, so it gives no direct perplexity comparison for Aether.
-
 ### Training throughput
 
-Sustained ~11,150 tokens/sec on an M4 Max throughout the run of about 8 hours 34 minutes. No divergence, no crashes, no thermal emergencies.
+The wall-clock average on an M4 Max was 10,635 tokens/sec (327,671,808 tokens in 513.5 minutes), a figure that includes evaluation time. The median logged training rate was 11,125 tokens/sec in the first phase and 10,660 tokens/sec in the extension. Both phases ran to completion with finite losses.
 
 ## Sample outputs
 
