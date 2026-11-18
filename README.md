@@ -155,6 +155,10 @@ Validation loss evaluated every 1,000 steps on 50 randomly-sampled batches from 
 ```bash
 # Set up
 python3.12 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+
+# Check the environment
+python setup_check.py
 
 # Prepare data (downloads OpenWebText, tokenises in parallel)
 python -m data.download
