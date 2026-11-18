@@ -1,0 +1,10 @@
+{
+  "n_keys": 76,
+  "struct_sha256": "0cabd27264ecd9757cdf0d1fcb201bcdd7305e9cc2d0a5d5ec565ce861545801",
+  "init_stds": {
+    "blocks.0.attn.qkv_proj.weight": 0.00408,
+    "blocks.0.attn.out_proj.weight": 0.00409,
+    "blocks.0.ffn.proj.weight": 0.00409
+  },
+  "logits_sha256": "c3cb88cf03e0ca833d803f1bfc37fd3afef386f8f8209a87a798dbfb97728c94"
+}
