@@ -21,12 +21,12 @@ MAX_STEPS    = 40000
 WEIGHT_DECAY = 0.1
 GRAD_CLIP    = 1.0
 
-BATCH_SIZE   = 16       # sequences per step
-BLOCK_SIZE   = 512      # tokens per sequence
+BATCH_SIZE   = 16  # sequences per step
+BLOCK_SIZE   = 512 # tokens per sequence
 
-EVAL_INTERVAL = 1000     # validation frequency
-EVAL_ITERS    = 50      # validation iterations
-LOG_INTERVAL  = 10      # logging frequency
+EVAL_INTERVAL = 1000 # validation frequency
+EVAL_ITERS    = 50   # validation iterations
+LOG_INTERVAL  = 10   # logging frequency
 
 CKPT_DIR      = "checkpoints/medium"
 

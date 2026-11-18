@@ -87,4 +87,4 @@ if __name__ == "__main__":
 
     # Manual check: two Linears of size (384, 3*384) and (384, 384), no bias
     expected = config.n_embd * 3 * config.n_embd + config.n_embd * config.n_embd
-    print(f"Expected:             {expected:,}")
+    print(f"Expected: {expected:,}")
