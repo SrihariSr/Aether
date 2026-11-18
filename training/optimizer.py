@@ -19,9 +19,6 @@ def configure_optimizer(
 
     optimizer = torch.optim.AdamW(param_groups, lr=learning_rate, betas=betas)
 
-    n_decay = sum(p.numel() for p in decay_params)
-    n_no_decay = sum(p.numel() for p in no_decay_params)
-
     return optimizer
 
 def get_lr(

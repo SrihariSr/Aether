@@ -69,9 +69,9 @@ class CausalSelfAttention(nn.Module):
 
 
 if __name__ == "__main__":
-    from config import andromeda_small
+    from .config import aether_small
 
-    config = andromeda_small()
+    config = aether_small()
     attn = CausalSelfAttention(config)
 
     # Fake input: batch of 2, 16 tokens, 384-dim embeddings

@@ -19,7 +19,7 @@ class GPTConfig:
         return self.n_embd // self.n_head # Dimension of each attention head
   
 def aether_small() -> GPTConfig:
-    # Around 15M parameters
+    # 30,018,816 parameters (29,920,512 excluding position embeddings)
     return GPTConfig(
         block_size=256,
         n_layer=6,
@@ -28,7 +28,7 @@ def aether_small() -> GPTConfig:
         dropout=0.1,
     )
 def aether_medium() -> GPTConfig:
-    # Around 50M parameters
+    # 63,755,264 parameters (63,493,120 excluding position embeddings)
     return GPTConfig(
         block_size=512,
         n_layer=12,

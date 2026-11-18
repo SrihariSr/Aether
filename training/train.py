@@ -96,7 +96,9 @@ def main():
     t_start = time.time()
 
     for step in range(start_step, MAX_STEPS + 1):
-        # Update learning rate for this step
+        # Update learning rate for this step.
+        # v1 trained for 30,000 steps and was then extended by 10,000 more. The first
+        # schedule ends at its 3e-5 floor, so the extension has its own warm-up and decay.
         if step <= 30000:
             lr = get_lr(step, WARMUP_STEPS, 30000, MAX_LR, MIN_LR)
         else:

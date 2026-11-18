@@ -43,14 +43,18 @@ class GPT(nn.Module):
         # Output projection to vocabulary
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
 
-        # Weight tying: share weights between token embedding and output projection
+        # Weight tying: the token embedding and the output projection use the same
+        # tensor, so this matrix is stored, trained and counted only once
         self.embed.token_emb.weight = self.lm_head.weight
 
         # Apply custom weight initialisation
         self.apply(self._init_weights)
 
         # Scale init of residual projections by 1/sqrt(2 * n_layer)
-        # GPT-2 trick: keeps variance stable through deep networks
+        # GPT-2 trick: keeps variance stable through deep networks.
+        # The "proj.weight" match below also catches attn.qkv_proj, which is not a
+        # residual projection, so Q, K and V start at this smaller std as well.
+        # It is left as it is because v1 was trained with this initialisation.
         for pn, p in self.named_parameters():
             if pn.endswith("out_proj.weight") or pn.endswith("proj.weight"):
                 nn.init.normal_(p, mean=0.0, std=0.02 / math.sqrt(2 * config.n_layer))
